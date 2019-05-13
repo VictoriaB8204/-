@@ -1,0 +1,620 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище Database1Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ClassDimensionValue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="feature" Type="uniqueidentifier" />
+          <Property Name="leftValueIncluded" Type="smallint" />
+          <Property Name="leftVaue" Type="float" />
+          <Property Name="rightValue" Type="float" />
+          <Property Name="rightValueIncluded" Type="smallint" />
+          <Property Name="unit" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Classes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Class" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ClassLogicalValues">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Feature" Type="uniqueidentifier" />
+          <Property Name="TrueValue" Type="nvarchar" MaxLength="50" />
+          <Property Name="FalseValue" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ClassScalarValues">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Feature" Type="uniqueidentifier" />
+          <Property Name="value" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="DimensionValue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="feature" Type="uniqueidentifier" />
+          <Property Name="leftValueIncluded" Type="varbinary" MaxLength="50" />
+          <Property Name="leftVaue" Type="float" />
+          <Property Name="rightValue" Type="float" />
+          <Property Name="rightValueIncluded" Type="varbinary" MaxLength="50" />
+          <Property Name="unit" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Feature">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Feature" Type="nvarchar" MaxLength="100" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Feature description">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Class" Type="uniqueidentifier" />
+          <Property Name="Feature" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="LogicalValues">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Feature" Type="uniqueidentifier" />
+          <Property Name="TrueValue" Type="nvarchar" MaxLength="50" />
+          <Property Name="FalseValue" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ScalarValues">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Feature" Type="uniqueidentifier" />
+          <Property Name="value" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <Association Name="FK_ClassDimensionValue_ToFeatureDescription">
+          <End Role="Feature description" Type="Self.Feature description" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ClassDimensionValue" Type="Self.ClassDimensionValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature description">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClassDimensionValue">
+              <PropertyRef Name="feature" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClassLogicalValues_ToFeatureDescription">
+          <End Role="Feature description" Type="Self.Feature description" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ClassLogicalValues" Type="Self.ClassLogicalValues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature description">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClassLogicalValues">
+              <PropertyRef Name="Feature" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClassScalarValues_ToFeatureDescription">
+          <End Role="Feature description" Type="Self.Feature description" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ClassScalarValues" Type="Self.ClassScalarValues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature description">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClassScalarValues">
+              <PropertyRef Name="Feature" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DimensionValue_ToFeature">
+          <End Role="Feature" Type="Self.Feature" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DimensionValue" Type="Self.DimensionValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DimensionValue">
+              <PropertyRef Name="feature" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Feature description_ToClass">
+          <End Role="Classes" Type="Self.Classes" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Feature description" Type="Self.Feature description" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Classes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Feature description">
+              <PropertyRef Name="Class" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Feature description_ToFeature">
+          <End Role="Feature" Type="Self.Feature" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Feature description" Type="Self.Feature description" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Feature description">
+              <PropertyRef Name="Feature" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LogicalValues_ToFeature">
+          <End Role="Feature" Type="Self.Feature" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="LogicalValues" Type="Self.LogicalValues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LogicalValues">
+              <PropertyRef Name="Feature" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ScalarValues_ToFeature">
+          <End Role="Feature" Type="Self.Feature" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ScalarValues" Type="Self.ScalarValues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ScalarValues">
+              <PropertyRef Name="Feature" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище Database1ModelContainer">
+          <EntitySet Name="ClassDimensionValue" EntityType="Self.ClassDimensionValue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Classes" EntityType="Self.Classes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ClassLogicalValues" EntityType="Self.ClassLogicalValues" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ClassScalarValues" EntityType="Self.ClassScalarValues" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DimensionValue" EntityType="Self.DimensionValue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Feature" EntityType="Self.Feature" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Feature description" EntityType="Self.Feature description" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LogicalValues" EntityType="Self.LogicalValues" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ScalarValues" EntityType="Self.ScalarValues" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ClassDimensionValue_ToFeatureDescription" Association="Self.FK_ClassDimensionValue_ToFeatureDescription">
+            <End Role="Feature description" EntitySet="Feature description" />
+            <End Role="ClassDimensionValue" EntitySet="ClassDimensionValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClassLogicalValues_ToFeatureDescription" Association="Self.FK_ClassLogicalValues_ToFeatureDescription">
+            <End Role="Feature description" EntitySet="Feature description" />
+            <End Role="ClassLogicalValues" EntitySet="ClassLogicalValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClassScalarValues_ToFeatureDescription" Association="Self.FK_ClassScalarValues_ToFeatureDescription">
+            <End Role="Feature description" EntitySet="Feature description" />
+            <End Role="ClassScalarValues" EntitySet="ClassScalarValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DimensionValue_ToFeature" Association="Self.FK_DimensionValue_ToFeature">
+            <End Role="Feature" EntitySet="Feature" />
+            <End Role="DimensionValue" EntitySet="DimensionValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feature description_ToClass" Association="Self.FK_Feature description_ToClass">
+            <End Role="Classes" EntitySet="Classes" />
+            <End Role="Feature description" EntitySet="Feature description" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feature description_ToFeature" Association="Self.FK_Feature description_ToFeature">
+            <End Role="Feature" EntitySet="Feature" />
+            <End Role="Feature description" EntitySet="Feature description" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LogicalValues_ToFeature" Association="Self.FK_LogicalValues_ToFeature">
+            <End Role="Feature" EntitySet="Feature" />
+            <End Role="LogicalValues" EntitySet="LogicalValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ScalarValues_ToFeature" Association="Self.FK_ScalarValues_ToFeature">
+            <End Role="Feature" EntitySet="Feature" />
+            <End Role="ScalarValues" EntitySet="ScalarValues" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Database1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ClassDimensionValue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="feature" Type="Guid" />
+          <Property Name="leftValueIncluded" Type="Int16" />
+          <Property Name="leftVaue" Type="Double" />
+          <Property Name="rightValue" Type="Double" />
+          <Property Name="rightValueIncluded" Type="Int16" />
+          <Property Name="unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Feature_description" Relationship="Self.FK_ClassDimensionValue_ToFeatureDescription" FromRole="ClassDimensionValue" ToRole="Feature_description" />
+        </EntityType>
+        <EntityType Name="Classes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Class" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Feature_description" Relationship="Self.FK_Feature_description_ToClass" FromRole="Classes" ToRole="Feature_description" />
+        </EntityType>
+        <EntityType Name="ClassLogicalValues">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Feature" Type="Guid" />
+          <Property Name="TrueValue" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FalseValue" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Feature_description" Relationship="Self.FK_ClassLogicalValues_ToFeatureDescription" FromRole="ClassLogicalValues" ToRole="Feature_description" />
+        </EntityType>
+        <EntityType Name="ClassScalarValues">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Feature" Type="Guid" />
+          <Property Name="value" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Feature_description" Relationship="Self.FK_ClassScalarValues_ToFeatureDescription" FromRole="ClassScalarValues" ToRole="Feature_description" />
+        </EntityType>
+        <EntityType Name="DimensionValue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="feature" Type="Guid" />
+          <Property Name="leftValueIncluded" Type="Binary" MaxLength="50" FixedLength="false" />
+          <Property Name="leftVaue" Type="Double" />
+          <Property Name="rightValue" Type="Double" />
+          <Property Name="rightValueIncluded" Type="Binary" MaxLength="50" FixedLength="false" />
+          <Property Name="unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Feature1" Relationship="Self.FK_DimensionValue_ToFeature" FromRole="DimensionValue" ToRole="Feature" />
+        </EntityType>
+        <EntityType Name="Feature">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Feature1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="DimensionValue" Relationship="Self.FK_DimensionValue_ToFeature" FromRole="Feature" ToRole="DimensionValue" />
+          <NavigationProperty Name="Feature_description" Relationship="Self.FK_Feature_description_ToFeature" FromRole="Feature" ToRole="Feature_description" />
+          <NavigationProperty Name="LogicalValues" Relationship="Self.FK_LogicalValues_ToFeature" FromRole="Feature" ToRole="LogicalValues" />
+          <NavigationProperty Name="ScalarValues" Relationship="Self.FK_ScalarValues_ToFeature" FromRole="Feature" ToRole="ScalarValues" />
+        </EntityType>
+        <EntityType Name="Feature_description">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Class" Type="Guid" />
+          <Property Name="Feature" Type="Guid" />
+          <NavigationProperty Name="ClassDimensionValue" Relationship="Self.FK_ClassDimensionValue_ToFeatureDescription" FromRole="Feature_description" ToRole="ClassDimensionValue" />
+          <NavigationProperty Name="Classes" Relationship="Self.FK_Feature_description_ToClass" FromRole="Feature_description" ToRole="Classes" />
+          <NavigationProperty Name="ClassLogicalValues" Relationship="Self.FK_ClassLogicalValues_ToFeatureDescription" FromRole="Feature_description" ToRole="ClassLogicalValues" />
+          <NavigationProperty Name="ClassScalarValues" Relationship="Self.FK_ClassScalarValues_ToFeatureDescription" FromRole="Feature_description" ToRole="ClassScalarValues" />
+          <NavigationProperty Name="Feature1" Relationship="Self.FK_Feature_description_ToFeature" FromRole="Feature_description" ToRole="Feature" />
+        </EntityType>
+        <EntityType Name="LogicalValues">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Feature" Type="Guid" />
+          <Property Name="TrueValue" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FalseValue" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Feature1" Relationship="Self.FK_LogicalValues_ToFeature" FromRole="LogicalValues" ToRole="Feature" />
+        </EntityType>
+        <EntityType Name="ScalarValues">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Feature" Type="Guid" />
+          <Property Name="value" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Feature1" Relationship="Self.FK_ScalarValues_ToFeature" FromRole="ScalarValues" ToRole="Feature" />
+        </EntityType>
+        <Association Name="FK_ClassDimensionValue_ToFeatureDescription">
+          <End Role="Feature_description" Type="Self.Feature_description" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ClassDimensionValue" Type="Self.ClassDimensionValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature_description">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClassDimensionValue">
+              <PropertyRef Name="feature" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Feature_description_ToClass">
+          <End Role="Classes" Type="Self.Classes" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Feature_description" Type="Self.Feature_description" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Classes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Feature_description">
+              <PropertyRef Name="Class" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClassLogicalValues_ToFeatureDescription">
+          <End Role="Feature_description" Type="Self.Feature_description" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ClassLogicalValues" Type="Self.ClassLogicalValues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature_description">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClassLogicalValues">
+              <PropertyRef Name="Feature" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClassScalarValues_ToFeatureDescription">
+          <End Role="Feature_description" Type="Self.Feature_description" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ClassScalarValues" Type="Self.ClassScalarValues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature_description">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClassScalarValues">
+              <PropertyRef Name="Feature" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DimensionValue_ToFeature">
+          <End Role="Feature" Type="Self.Feature" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DimensionValue" Type="Self.DimensionValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DimensionValue">
+              <PropertyRef Name="feature" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Feature_description_ToFeature">
+          <End Role="Feature" Type="Self.Feature" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Feature_description" Type="Self.Feature_description" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Feature_description">
+              <PropertyRef Name="Feature" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LogicalValues_ToFeature">
+          <End Role="Feature" Type="Self.Feature" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="LogicalValues" Type="Self.LogicalValues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LogicalValues">
+              <PropertyRef Name="Feature" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ScalarValues_ToFeature">
+          <End Role="Feature" Type="Self.Feature" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ScalarValues" Type="Self.ScalarValues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ScalarValues">
+              <PropertyRef Name="Feature" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Database1Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ClassDimensionValue" EntityType="Self.ClassDimensionValue" />
+          <EntitySet Name="Classes" EntityType="Self.Classes" />
+          <EntitySet Name="ClassLogicalValues" EntityType="Self.ClassLogicalValues" />
+          <EntitySet Name="ClassScalarValues" EntityType="Self.ClassScalarValues" />
+          <EntitySet Name="DimensionValue" EntityType="Self.DimensionValue" />
+          <EntitySet Name="Feature" EntityType="Self.Feature" />
+          <EntitySet Name="Feature_description" EntityType="Self.Feature_description" />
+          <EntitySet Name="LogicalValues" EntityType="Self.LogicalValues" />
+          <EntitySet Name="ScalarValues" EntityType="Self.ScalarValues" />
+          <AssociationSet Name="FK_ClassDimensionValue_ToFeatureDescription" Association="Self.FK_ClassDimensionValue_ToFeatureDescription">
+            <End Role="Feature_description" EntitySet="Feature_description" />
+            <End Role="ClassDimensionValue" EntitySet="ClassDimensionValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feature_description_ToClass" Association="Self.FK_Feature_description_ToClass">
+            <End Role="Classes" EntitySet="Classes" />
+            <End Role="Feature_description" EntitySet="Feature_description" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClassLogicalValues_ToFeatureDescription" Association="Self.FK_ClassLogicalValues_ToFeatureDescription">
+            <End Role="Feature_description" EntitySet="Feature_description" />
+            <End Role="ClassLogicalValues" EntitySet="ClassLogicalValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClassScalarValues_ToFeatureDescription" Association="Self.FK_ClassScalarValues_ToFeatureDescription">
+            <End Role="Feature_description" EntitySet="Feature_description" />
+            <End Role="ClassScalarValues" EntitySet="ClassScalarValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DimensionValue_ToFeature" Association="Self.FK_DimensionValue_ToFeature">
+            <End Role="Feature" EntitySet="Feature" />
+            <End Role="DimensionValue" EntitySet="DimensionValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feature_description_ToFeature" Association="Self.FK_Feature_description_ToFeature">
+            <End Role="Feature" EntitySet="Feature" />
+            <End Role="Feature_description" EntitySet="Feature_description" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LogicalValues_ToFeature" Association="Self.FK_LogicalValues_ToFeature">
+            <End Role="Feature" EntitySet="Feature" />
+            <End Role="LogicalValues" EntitySet="LogicalValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ScalarValues_ToFeature" Association="Self.FK_ScalarValues_ToFeature">
+            <End Role="Feature" EntitySet="Feature" />
+            <End Role="ScalarValues" EntitySet="ScalarValues" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище Database1ModelContainer" CdmEntityContainer="Database1Entities">
+          <EntitySetMapping Name="ClassDimensionValue">
+            <EntityTypeMapping TypeName="Database1Model.ClassDimensionValue">
+              <MappingFragment StoreEntitySet="ClassDimensionValue">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="feature" ColumnName="feature" />
+                <ScalarProperty Name="leftValueIncluded" ColumnName="leftValueIncluded" />
+                <ScalarProperty Name="leftVaue" ColumnName="leftVaue" />
+                <ScalarProperty Name="rightValue" ColumnName="rightValue" />
+                <ScalarProperty Name="rightValueIncluded" ColumnName="rightValueIncluded" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Classes">
+            <EntityTypeMapping TypeName="Database1Model.Classes">
+              <MappingFragment StoreEntitySet="Classes">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Class" ColumnName="Class" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClassLogicalValues">
+            <EntityTypeMapping TypeName="Database1Model.ClassLogicalValues">
+              <MappingFragment StoreEntitySet="ClassLogicalValues">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Feature" ColumnName="Feature" />
+                <ScalarProperty Name="TrueValue" ColumnName="TrueValue" />
+                <ScalarProperty Name="FalseValue" ColumnName="FalseValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClassScalarValues">
+            <EntityTypeMapping TypeName="Database1Model.ClassScalarValues">
+              <MappingFragment StoreEntitySet="ClassScalarValues">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Feature" ColumnName="Feature" />
+                <ScalarProperty Name="value" ColumnName="value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DimensionValue">
+            <EntityTypeMapping TypeName="Database1Model.DimensionValue">
+              <MappingFragment StoreEntitySet="DimensionValue">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="feature" ColumnName="feature" />
+                <ScalarProperty Name="leftValueIncluded" ColumnName="leftValueIncluded" />
+                <ScalarProperty Name="leftVaue" ColumnName="leftVaue" />
+                <ScalarProperty Name="rightValue" ColumnName="rightValue" />
+                <ScalarProperty Name="rightValueIncluded" ColumnName="rightValueIncluded" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Feature">
+            <EntityTypeMapping TypeName="Database1Model.Feature">
+              <MappingFragment StoreEntitySet="Feature">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Feature1" ColumnName="Feature" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Feature_description">
+            <EntityTypeMapping TypeName="Database1Model.Feature_description">
+              <MappingFragment StoreEntitySet="Feature description">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Class" ColumnName="Class" />
+                <ScalarProperty Name="Feature" ColumnName="Feature" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LogicalValues">
+            <EntityTypeMapping TypeName="Database1Model.LogicalValues">
+              <MappingFragment StoreEntitySet="LogicalValues">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Feature" ColumnName="Feature" />
+                <ScalarProperty Name="TrueValue" ColumnName="TrueValue" />
+                <ScalarProperty Name="FalseValue" ColumnName="FalseValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScalarValues">
+            <EntityTypeMapping TypeName="Database1Model.ScalarValues">
+              <MappingFragment StoreEntitySet="ScalarValues">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Feature" ColumnName="Feature" />
+                <ScalarProperty Name="value" ColumnName="value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
