@@ -132,17 +132,42 @@ namespace WindowsFormsApp1
             featureDescriptionId = Convert.ToString(sqlReader["Id"]);
             sqlReader.Close();
 
-            command = new SqlCommand("INSERT INTO ClassLogicalValues (Feature, TrueValue, FalseValue)" +
-                "VALUES(@Id, @TrueValue, @FalseValue)", sqlConnection);
+            command = new SqlCommand("SELECT * FROM ClassLogicalValues WHERE Feature=@feature", sqlConnection);
+            command.Parameters.AddWithValue("feature", featureDescriptionId);
+            sqlReader = await command.ExecuteReaderAsync();
+            bool recordExists = await sqlReader.ReadAsync();
+            sqlReader.Close();
+
+            bool emptyValues = !checkBox1.Checked && !checkBox2.Checked;
+
+            if (recordExists && !emptyValues)
+                command = new SqlCommand("UPDATE ClassLogicalValues " +
+                   "SET TrueValue=@TrueValue, FalseValue=@FalseValue " +
+                   "WHERE Feature=@Id", sqlConnection);
+            
+            if (!recordExists && !emptyValues)
+                command = new SqlCommand("INSERT INTO ClassLogicalValues (Feature, TrueValue, FalseValue)" +
+                    "VALUES(@Id, @TrueValue, @FalseValue)", sqlConnection);
+
+            if (recordExists && emptyValues)
+                command = new SqlCommand("DELETE FROM ClassLogicalValues WHERE Feature=@Id", sqlConnection);
+
+            if(!recordExists && emptyValues)
+            {
+                this.Close();
+                return;
+            }
+
             command.Parameters.AddWithValue("Id", featureDescriptionId);
+
             if(checkBox1.Checked)
                 command.Parameters.AddWithValue("TrueValue", checkBox1.Text);
             else
-                command.Parameters.AddWithValue("TrueValue", "");
+                command.Parameters.AddWithValue("TrueValue", Convert.DBNull);
             if (checkBox2.Checked)
                 command.Parameters.AddWithValue("FalseValue", checkBox2.Text);
             else
-                command.Parameters.AddWithValue("FalseValue", "");
+                command.Parameters.AddWithValue("FalseValue", Convert.DBNull);
 
             await command.ExecuteNonQueryAsync();
 
