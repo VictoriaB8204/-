@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ namespace WindowsFormsApp1
 {
     public partial class MainForm : Form
     {
+        SqlConnection sqlConnection;
+
         public MainForm()
         {
             InitializeComponent();
@@ -26,12 +29,40 @@ namespace WindowsFormsApp1
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            if (!button2.IsAccessible)
+                MessageBox.Show("Данная кнопка недоступна, так как не пройдена проверка полноты базы знаний.",
+                    "Информация",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private async void MainForm_Load(object sender, EventArgs e)
         {
-
+            string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\учеба\Смагин\Реализация классификатора\WindowsFormsApp1\WindowsFormsApp1\Database1.mdf;Integrated Security=True";
+            sqlConnection = new SqlConnection(connectionString);
+            await sqlConnection.OpenAsync();
+            SqlDataReader sqlReader = null;
+            
+            SqlCommand command = new SqlCommand("SELECT completeness FROM Completeness", sqlConnection);
+            sqlReader = await command.ExecuteReaderAsync();
+            await sqlReader.ReadAsync();
+            try
+            {
+                if (Convert.ToInt64(sqlReader["completeness"]) == 0)
+                {
+                    button2.IsAccessible = false;
+                    button2.Enabled = false;
+                }
+                else
+                {
+                    button2.IsAccessible = true;
+                    button2.Enabled = true;
+                }
+            }
+            catch
+            {
+                button2.IsAccessible = false;
+                button2.Enabled = false;
+            }
+            sqlReader.Close();
         }
     }
 }
