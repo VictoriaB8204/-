@@ -170,33 +170,45 @@ namespace WindowsFormsApp1
             SqlCommand command = new SqlCommand("SELECT Id FROM FeatureDescription WHERE Class=@class AND Feature=@feature", sqlConnection);
             command.Parameters.AddWithValue("feature", _featureId);
             command.Parameters.AddWithValue("class", _classId);
-            SqlDataReader sqlReader = await command.ExecuteReaderAsync();
-            await sqlReader.ReadAsync();
-            featureDescriptionId = Convert.ToString(sqlReader["Id"]);
-            sqlReader.Close();
+            SqlDataReader sqlReader = null;
+            try
+            {
+                sqlReader = await command.ExecuteReaderAsync();
+                await sqlReader.ReadAsync();
+                featureDescriptionId = Convert.ToString(sqlReader["Id"]);
+                sqlReader.Close();
 
-            command = new SqlCommand("SELECT * FROM ClassDimensionValue WHERE Feature=@feature", sqlConnection);
-            command.Parameters.AddWithValue("feature", featureDescriptionId);
-            sqlReader = await command.ExecuteReaderAsync();
-            bool recordExist = await sqlReader.ReadAsync();
-            sqlReader.Close();
+                command = new SqlCommand("SELECT * FROM ClassDimensionValue WHERE Feature=@feature", sqlConnection);
+                command.Parameters.AddWithValue("feature", featureDescriptionId);
+                sqlReader = await command.ExecuteReaderAsync();
+                bool recordExist = await sqlReader.ReadAsync();
+                sqlReader.Close();
 
-            if(recordExist)
-                command = new SqlCommand("UPDATE ClassDimensionValue " +
-                "SET leftValueIncluded=@leftValueIncluded, leftValue=@leftValue, " +
-                "rightValue=@rightValue, rightValueIncluded=@rightValueIncluded " +
-                "WHERE Feature=@Id", sqlConnection);
-            else
-                command = new SqlCommand("INSERT INTO ClassDimensionValue " +
-                    "(Feature, leftValueIncluded, leftValue, rightValue, rightValueIncluded)" +
-                    "VALUES(@Id, @leftValueIncluded, @leftValue, @rightValue, @rightValueIncluded)", sqlConnection);
-            command.Parameters.AddWithValue("Id", featureDescriptionId);
-            command.Parameters.AddWithValue("leftValueIncluded", Convert.ToDecimal(comboBox1.SelectedIndex));
-            command.Parameters.AddWithValue("leftValue", numericUpDown1.Value);
-            command.Parameters.AddWithValue("rightValue", numericUpDown2.Value);
-            command.Parameters.AddWithValue("rightValueIncluded", Convert.ToDecimal(comboBox2.SelectedIndex));
-            await command.ExecuteNonQueryAsync();
-
+                if (recordExist)
+                    command = new SqlCommand("UPDATE ClassDimensionValue " +
+                    "SET leftValueIncluded=@leftValueIncluded, leftValue=@leftValue, " +
+                    "rightValue=@rightValue, rightValueIncluded=@rightValueIncluded " +
+                    "WHERE Feature=@Id", sqlConnection);
+                else
+                    command = new SqlCommand("INSERT INTO ClassDimensionValue " +
+                        "(Feature, leftValueIncluded, leftValue, rightValue, rightValueIncluded)" +
+                        "VALUES(@Id, @leftValueIncluded, @leftValue, @rightValue, @rightValueIncluded)", sqlConnection);
+                command.Parameters.AddWithValue("Id", featureDescriptionId);
+                command.Parameters.AddWithValue("leftValueIncluded", Convert.ToDecimal(comboBox1.SelectedIndex));
+                command.Parameters.AddWithValue("leftValue", numericUpDown1.Value);
+                command.Parameters.AddWithValue("rightValue", numericUpDown2.Value);
+                command.Parameters.AddWithValue("rightValueIncluded", Convert.ToDecimal(comboBox2.SelectedIndex));
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (sqlReader != null)
+                    sqlReader.Close();
+            }
             this.Close();
         }
     }
