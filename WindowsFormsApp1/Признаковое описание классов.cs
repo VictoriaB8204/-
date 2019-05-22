@@ -70,6 +70,7 @@ namespace WindowsFormsApp1
         private async void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             SqlDataReader sqlReader = null;
+            listBox1.Items.Clear();
             listBox2.Items.Clear();
 
             SqlCommand command = new SqlCommand("SELECT [Id] FROM [Classes] WHERE [Class]=@class", sqlConnection);

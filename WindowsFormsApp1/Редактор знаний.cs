@@ -66,5 +66,12 @@ namespace WindowsFormsApp1
             ifrm.Show(this); // отображаем Form2
             this.Hide(); // скрываем Form1
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Form ifrm = new Проверка_полноты();
+            ifrm.Show(this); // отображаем Form2
+            this.Hide(); // скрываем Form1
+        }
     }
 }
