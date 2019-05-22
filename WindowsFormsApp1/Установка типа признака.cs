@@ -185,17 +185,24 @@ namespace WindowsFormsApp1
 
             if (radioButton1.Checked)
             {
-                //открыть форму для скаляр знач
+                Form ifrm = new Ввод_скалярных_значений(Convert.ToString(comboBox1.SelectedItem));
+                ifrm.Show(this); // отображаем Form2
+                this.Hide(); // скрываем Form1
             }
 
             if (radioButton2.Checked)
             {
-                //открыть форму для размер знач
+                Form ifrm = new Ввод_размерных_значений(Convert.ToString(comboBox1.SelectedItem));
+                ifrm.Show(this); // отображаем Form2
+                this.Hide(); // скрываем Form1
             }
 
             if (radioButton3.Checked)
             {
-                //открыть форму для логич знач
+
+                Form ifrm = new Ввод_логических_значений(Convert.ToString(comboBox1.SelectedItem));
+                ifrm.Show(this); // отображаем Form2
+                this.Hide(); // скрываем Form1
             }
         }
     }
