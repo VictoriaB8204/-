@@ -141,7 +141,11 @@ namespace WindowsFormsApp1
                 return;
             }
             SqlDataReader sqlReader = null;
-            SqlCommand command;
+
+            SqlCommand command = new SqlCommand("UPDATE Completeness SET " +
+                "completeness=@value", sqlConnection);
+            command.Parameters.AddWithValue("value", 0);
+            await command.ExecuteNonQueryAsync();
 
             string featureId = "";
             while(listBox1.Items.Count > 0)
@@ -178,7 +182,12 @@ namespace WindowsFormsApp1
             }
 
             SqlDataReader sqlReader = null;
-            SqlCommand command;
+
+            SqlCommand command = new SqlCommand("UPDATE Completeness SET " +
+                "completeness=@value", sqlConnection);
+            command.Parameters.AddWithValue("value", 0);
+            await command.ExecuteNonQueryAsync();
+
             string featureId = "";
 
             command = new SqlCommand("SELECT [Id] FROM [Feature] WHERE [Feature]=@feature", sqlConnection);
@@ -221,7 +230,12 @@ namespace WindowsFormsApp1
             }
 
             SqlDataReader sqlReader = null;
-            SqlCommand command;
+            
+            SqlCommand command = new SqlCommand("UPDATE Completeness SET " +
+                "completeness=@value", sqlConnection);
+            command.Parameters.AddWithValue("value", 0);
+            await command.ExecuteNonQueryAsync();
+
             string featureId = "";
 
             command = new SqlCommand("SELECT [Id] FROM [Feature] WHERE [Feature]=@feature", sqlConnection);
@@ -263,7 +277,12 @@ namespace WindowsFormsApp1
                 return;
             }
             SqlDataReader sqlReader = null;
-            SqlCommand command;
+
+            SqlCommand command = new SqlCommand("UPDATE Completeness SET " +
+                "completeness=@value", sqlConnection);
+            command.Parameters.AddWithValue("value", 0);
+            await command.ExecuteNonQueryAsync();
+
             string featureId = "";
 
             while(listBox2.Items.Count > 0)

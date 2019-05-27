@@ -79,7 +79,12 @@ namespace WindowsFormsApp1
         {
             if (!string.IsNullOrEmpty(textBox1.Text) && !string.IsNullOrWhiteSpace(textBox1.Text))
             {
-                SqlCommand command = new SqlCommand("SELECT ScalarValues.value " +
+                SqlCommand command = new SqlCommand("UPDATE Completeness SET " +
+                    "completeness=@value", sqlConnection);
+                command.Parameters.AddWithValue("value", 0);
+                await command.ExecuteNonQueryAsync();
+
+                command = new SqlCommand("SELECT ScalarValues.value " +
                 "FROM Feature INNER JOIN ScalarValues ON Feature.Id=ScalarValues.Feature " +
                 "WHERE Feature.Feature=@feature AND [value]=@value", sqlConnection);
                 command.Parameters.AddWithValue("feature", _feature);
@@ -131,8 +136,12 @@ namespace WindowsFormsApp1
                 var result = MessageBox.Show("Вы уверены, что хотите удалить выбранное значение?\n Восстановление удаленного значения будет невозможно.", "Предупреждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 if (result == DialogResult.OK)
                 {
+                    SqlCommand command = new SqlCommand("UPDATE Completeness SET " +
+                        "completeness=@value", sqlConnection);
+                    command.Parameters.AddWithValue("value", 0);
+                    await command.ExecuteNonQueryAsync();
 
-                    SqlCommand command = new SqlCommand("DELETE ScalarValues " +
+                    command = new SqlCommand("DELETE ScalarValues " +
                         "FROM Feature INNER JOIN ScalarValues ON Feature.Id=ScalarValues.Feature " +
                         "WHERE Feature.Feature=@feature AND value=@value", sqlConnection);
 

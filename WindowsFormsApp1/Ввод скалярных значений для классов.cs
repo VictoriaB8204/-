@@ -126,6 +126,12 @@ namespace WindowsFormsApp1
             SqlDataReader sqlReader = null;
             SqlCommand command = null;
             string featureDescriptionId = "";
+            
+            command = new SqlCommand("UPDATE Completeness SET " +
+                "completeness=@value", sqlConnection);
+            command.Parameters.AddWithValue("value", 0);
+            await command.ExecuteNonQueryAsync();
+
             while (listBox1.Items.Count > 0)
             {
                 command = new SqlCommand("SELECT Id FROM FeatureDescription WHERE Class=@class AND Feature=@feature", sqlConnection);
@@ -153,8 +159,14 @@ namespace WindowsFormsApp1
                 MessageBox.Show("Выберите значение!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            SqlCommand command = new SqlCommand("UPDATE Completeness SET " +
+                "completeness=@value", sqlConnection);
+            command.Parameters.AddWithValue("value", 0);
+            await command.ExecuteNonQueryAsync();
+
             string featureDescriptionId = "";
-            SqlCommand command = new SqlCommand("SELECT Id FROM FeatureDescription WHERE Class=@class AND Feature=@feature", sqlConnection);
+            command = new SqlCommand("SELECT Id FROM FeatureDescription WHERE Class=@class AND Feature=@feature", sqlConnection);
             command.Parameters.AddWithValue("feature", _featureId);
             command.Parameters.AddWithValue("class", _classId);
             SqlDataReader sqlReader = await command.ExecuteReaderAsync();
@@ -178,8 +190,14 @@ namespace WindowsFormsApp1
                 MessageBox.Show("Выберите значение!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            SqlCommand command = new SqlCommand("UPDATE Completeness SET " +
+                "completeness=@value", sqlConnection);
+            command.Parameters.AddWithValue("value", 0);
+            await command.ExecuteNonQueryAsync();
+
             string featureDescriptionId = "";
-            SqlCommand command = new SqlCommand("SELECT Id FROM FeatureDescription WHERE Class=@class AND Feature=@feature", sqlConnection);
+            command = new SqlCommand("SELECT Id FROM FeatureDescription WHERE Class=@class AND Feature=@feature", sqlConnection);
             command.Parameters.AddWithValue("feature", _featureId);
             command.Parameters.AddWithValue("class", _classId);
             SqlDataReader sqlReader = await command.ExecuteReaderAsync();
@@ -206,6 +224,12 @@ namespace WindowsFormsApp1
             SqlDataReader sqlReader = null;
             SqlCommand command = null;
             string featureDescriptionId = "";
+
+            command = new SqlCommand("UPDATE Completeness SET " +
+                "completeness=@value", sqlConnection);
+            command.Parameters.AddWithValue("value", 0);
+            await command.ExecuteNonQueryAsync();
+
             while (listBox2.Items.Count > 0)
             {
                 command = new SqlCommand("SELECT Id FROM FeatureDescription WHERE Class=@class AND Feature=@feature", sqlConnection);

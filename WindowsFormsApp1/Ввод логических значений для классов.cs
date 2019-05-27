@@ -139,20 +139,30 @@ namespace WindowsFormsApp1
             sqlReader.Close();
 
             bool emptyValues = !checkBox1.Checked && !checkBox2.Checked;
+            bool completenessChecked = false;
 
             if (recordExists && !emptyValues)
+            {
                 command = new SqlCommand("UPDATE ClassLogicalValues " +
                    "SET TrueValue=@TrueValue, FalseValue=@FalseValue " +
                    "WHERE Feature=@Id", sqlConnection);
-            
+                completenessChecked = true;
+            }
+
             if (!recordExists && !emptyValues)
+            {
                 command = new SqlCommand("INSERT INTO ClassLogicalValues (Feature, TrueValue, FalseValue)" +
                     "VALUES(@Id, @TrueValue, @FalseValue)", sqlConnection);
+                completenessChecked = true;
+            }
 
             if (recordExists && emptyValues)
+            {
                 command = new SqlCommand("DELETE FROM ClassLogicalValues WHERE Feature=@Id", sqlConnection);
+                completenessChecked = true;
+            }
 
-            if(!recordExists && emptyValues)
+                if (!recordExists && emptyValues)
             {
                 this.Close();
                 return;
@@ -170,6 +180,14 @@ namespace WindowsFormsApp1
                 command.Parameters.AddWithValue("FalseValue", Convert.DBNull);
 
             await command.ExecuteNonQueryAsync();
+
+            if (completenessChecked)
+            {
+                command = new SqlCommand("UPDATE Completeness SET " +
+                    "completeness=@value", sqlConnection);
+                command.Parameters.AddWithValue("value", 0);
+                await command.ExecuteNonQueryAsync();
+            }
 
             this.Close();
         }

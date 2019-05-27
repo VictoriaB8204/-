@@ -124,7 +124,12 @@ namespace WindowsFormsApp1
                 return;
             }
 
-            SqlCommand command = new SqlCommand("SELECT * " +
+            SqlCommand command = new SqlCommand("UPDATE Completeness SET " +
+                "completeness=@value", sqlConnection);
+            command.Parameters.AddWithValue("value", 0);
+            await command.ExecuteNonQueryAsync();
+
+            command = new SqlCommand("SELECT * " +
             "FROM Feature INNER JOIN DimensionValue ON Feature.Id=DimensionValue.Feature " +
             "WHERE [Feature]=@feature AND [leftValueIncluded]=@leftValueIncluded AND leftValue=@leftValue " +
             "AND rightValue=@rightValue AND [rightValueIncluded]=@rightValueIncluded AND unit=@unit", sqlConnection);

@@ -65,7 +65,12 @@ namespace WindowsFormsApp1
         {
             if (!string.IsNullOrEmpty(textBox1.Text) && !string.IsNullOrWhiteSpace(textBox1.Text))
             {
-                SqlCommand command = new SqlCommand("SELECT [Id] FROM [Feature] WHERE [Feature]=@feature", sqlConnection);
+                SqlCommand command = new SqlCommand("UPDATE Completeness SET " +
+                    "completeness=@value", sqlConnection);
+                command.Parameters.AddWithValue("value", 0);
+                await command.ExecuteNonQueryAsync();
+
+                command = new SqlCommand("SELECT [Id] FROM [Feature] WHERE [Feature]=@feature", sqlConnection);
                 command.Parameters.AddWithValue("feature", textBox1.Text);
                 SqlDataReader sqlReader = await command.ExecuteReaderAsync();
                 bool recordExist = await sqlReader.ReadAsync();
@@ -103,7 +108,12 @@ namespace WindowsFormsApp1
                 var result = MessageBox.Show("Вы уверены, что хотите удалить выбранный признак?\nВосстановление удаленного значения будет невозможно.", "Предупреждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 if (result == DialogResult.OK)
                 {
-                    SqlCommand command = new SqlCommand("DELETE FROM [Feature] WHERE [Feature]=@feature", sqlConnection);
+                    SqlCommand command = new SqlCommand("UPDATE Completeness SET " +
+                        "completeness=@value", sqlConnection);
+                    command.Parameters.AddWithValue("value", 0);
+                    await command.ExecuteNonQueryAsync();
+
+                    command = new SqlCommand("DELETE FROM [Feature] WHERE [Feature]=@feature", sqlConnection);
                     command.Parameters.AddWithValue("feature", listBox1.Items[chosenFeature]);
                     await command.ExecuteNonQueryAsync();
                     listBox1.Items.RemoveAt(chosenFeature);

@@ -70,6 +70,11 @@ namespace WindowsFormsApp1
                 var result = MessageBox.Show("Вы уверены, что хотите изменить тип признака?\nВозможные значения признака и значения признака для классов будут утеряны.", "Предупреждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 if (result == DialogResult.OK)
                 {
+                    SqlCommand command = new SqlCommand("UPDATE Completeness SET " +
+                        "completeness=@value", sqlConnection);
+                    command.Parameters.AddWithValue("value", 0);
+                    await command.ExecuteNonQueryAsync();
+
                     if (type == "Скалярный")
                     {
                         SqlCommand command1 = new SqlCommand("DELETE ScalarValues " +
@@ -194,8 +199,13 @@ namespace WindowsFormsApp1
             {
                 var result = MessageBox.Show("Вы уверены, что хотите изменить тип признака?\nВозможные значения признака и значения признака для классов будут утеряны.", "Предупреждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 if (result == DialogResult.OK)
-                { 
-                    if(type == "Скалярный")
+                {
+                    SqlCommand command = new SqlCommand("UPDATE Completeness SET " +
+                        "completeness=@value", sqlConnection);
+                    command.Parameters.AddWithValue("value", 0);
+                    await command.ExecuteNonQueryAsync();
+
+                    if (type == "Скалярный")
                     {
                         SqlCommand command1 = new SqlCommand("DELETE ScalarValues " +
                             "FROM Feature INNER JOIN ScalarValues ON Feature.Id=ScalarValues.Feature " +
