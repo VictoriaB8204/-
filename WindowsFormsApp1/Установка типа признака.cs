@@ -129,7 +129,7 @@ namespace WindowsFormsApp1
                         await command2.ExecuteNonQueryAsync();
                     }
 
-                    SqlCommand command = new SqlCommand("UPDATE [Feature] SET [Type]=@type WHERE [Feature]=@feature", sqlConnection);
+                    command = new SqlCommand("UPDATE [Feature] SET [Type]=@type WHERE [Feature]=@feature", sqlConnection);
                     command.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
                     command.Parameters.AddWithValue("type", selectedType);
                     await command.ExecuteNonQueryAsync();
@@ -259,7 +259,7 @@ namespace WindowsFormsApp1
                         await command2.ExecuteNonQueryAsync();
                     }
 
-                    SqlCommand command = new SqlCommand("UPDATE [Feature] SET [Type]=@type WHERE [Feature]=@feature", sqlConnection);
+                    command = new SqlCommand("UPDATE [Feature] SET [Type]=@type WHERE [Feature]=@feature", sqlConnection);
                     command.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
                     command.Parameters.AddWithValue("type", selectedType);
                     await command.ExecuteNonQueryAsync();
