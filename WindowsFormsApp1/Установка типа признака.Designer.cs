@@ -82,6 +82,7 @@ namespace WindowsFormsApp1
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Скалярные значения";
             this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // radioButton2
             // 
@@ -94,6 +95,7 @@ namespace WindowsFormsApp1
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Размерные значения";
             this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // radioButton3
             // 
@@ -106,6 +108,7 @@ namespace WindowsFormsApp1
             this.radioButton3.TabStop = true;
             this.radioButton3.Text = "Логические значения";
             this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
             // 
             // button4
             // 
@@ -154,10 +157,6 @@ namespace WindowsFormsApp1
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
 
         #endregion
         private System.Windows.Forms.ComboBox comboBox1;

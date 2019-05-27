@@ -117,6 +117,13 @@ namespace WindowsFormsApp1
                 return;
             }
 
+            if (Convert.ToString(comboBox1.SelectedItem) != Convert.ToString(comboBox2.SelectedItem) &&
+                numericUpDown1.Value == numericUpDown2.Value)
+            {
+                MessageBox.Show("Неверный интервал!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             SqlCommand command = new SqlCommand("SELECT * " +
             "FROM Feature INNER JOIN DimensionValue ON Feature.Id=DimensionValue.Feature " +
             "WHERE [Feature]=@feature AND [leftValueIncluded]=@leftValueIncluded AND leftValue=@leftValue " +

@@ -28,16 +28,17 @@ namespace WindowsFormsApp1
                 Owner.Location.Y + Owner.Height / 2 - Height / 2);
 
             //выполняем проверку полноты
-            bool completenessChecked = true; 
+            bool completenessChecked = true;
 
             string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\учеба\Смагин\Реализация классификатора\WindowsFormsApp1\WindowsFormsApp1\Database1.mdf;Integrated Security=True";
             sqlConnection = new SqlConnection(connectionString);
             await sqlConnection.OpenAsync();
             SqlDataReader sqlReader = null;
-            
-            List<List<string>> featureValues = new List<List<string>>(); //массив для хранения результата запроса возможных значений признака
+
+            List<string> featureValues = new List<string>(); //массив для хранения результата запроса возможных значений признака
             List<List<string>> classes = new List<List<string>>(); //массив для хранения результата запроса списка классов
             List<List<string>> featureDescription = new List<List<string>>(); //массив для хранения результата запроса признакового описания
+            List<string> featureClassValues = new List<string>(); //массив для хранения результата запроса значений признака для класса
 
             //получаем список классов
             SqlCommand command = new SqlCommand("SELECT * FROM [Classes] ORDER BY Class", sqlConnection);
@@ -54,9 +55,9 @@ namespace WindowsFormsApp1
                 sqlReader.Close();
 
                 //для каждого класса получаем признаковое описание
-                for(int i = 0; i < classes.Count; i++)
+                for (int i = 0; i < classes.Count; i++)
                 {
-                    command = new SqlCommand("SELECT [FeatureDescription].[Id], [Feature].[Feature], [Feature].[Type] " +
+                    command = new SqlCommand("SELECT [FeatureDescription].[Id] As Id, [Feature].[Feature], [Feature].[Type], [Feature].[Id] As FeatureId " +
                         "FROM [FeatureDescription] INNER JOIN [Feature] ON [FeatureDescription].[Feature]=[Feature].[Id] " +
                         "WHERE [FeatureDescription].[Class]=@ClassId", sqlConnection);
                     command.Parameters.AddWithValue("ClassId", classes[i][0]);
@@ -64,10 +65,11 @@ namespace WindowsFormsApp1
                     {
                         //записываем результаты запроса признакового описания
                         sqlReader = await command.ExecuteReaderAsync();
-                        if(!await sqlReader.ReadAsync())
+                        if (!await sqlReader.ReadAsync())
                         {
                             listBox1.Items.Add("У класса " + classes[i][1] + " нет признакового описания");
                             completenessChecked = false;
+                            sqlReader.Close();
                             continue;
                         }
 
@@ -77,23 +79,35 @@ namespace WindowsFormsApp1
                             featureDescription[featureDescription.Count - 1].Add(Convert.ToString(sqlReader["Id"]));
                             featureDescription[featureDescription.Count - 1].Add(Convert.ToString(sqlReader["Feature"]));
                             featureDescription[featureDescription.Count - 1].Add(Convert.ToString(sqlReader["Type"]));
+                            featureDescription[featureDescription.Count - 1].Add(Convert.ToString(sqlReader["FeatureId"]));
                         } while (await sqlReader.ReadAsync());
                         sqlReader.Close();
-                        
+
                         //проверим наличие значений признаков для класса
-                        for(int j = 0; j < featureDescription.Count; j++)
+                        for (int j = 0; j < featureDescription.Count; j++)
                         {
+                            if (featureDescription[j][2] == "")
+                            {
+                                listBox1.Items.Add("У признака " + featureDescription[j][1]
+                                    + " отсутствуют возможные значения");
+                                listBox1.Items.Add("В классе " + classes[i][1]
+                                    + " у признака " + featureDescription[j][1]
+                                    + " отсутствуют значения");
+                                completenessChecked = false;
+                                continue;
+                            }
+
                             if (featureDescription[j][2] == "Скалярный")
                                 command = new SqlCommand("SELECT * FROM ClassScalarValues " +
-                                    "WHERE ClassScalarValues.Id=@featureDescriptionId", sqlConnection);
+                                    "WHERE ClassScalarValues.Feature=@featureDescriptionId", sqlConnection);
 
                             if (featureDescription[j][2] == "Размерный")
                                 command = new SqlCommand("SELECT * FROM ClassDimensionValue " +
-                                    "WHERE ClassDimensionValue.Id=@featureDescriptionId", sqlConnection);
+                                    "WHERE ClassDimensionValue.Feature=@featureDescriptionId", sqlConnection);
 
                             if (featureDescription[j][2] == "Логический")
                                 command = new SqlCommand("SELECT * FROM ClassLogicalValues " +
-                                    "WHERE ClassLogicalValues.Id=@featureDescriptionId", sqlConnection);
+                                    "WHERE ClassLogicalValues.Feature=@featureDescriptionId", sqlConnection);
 
                             command.Parameters.AddWithValue("featureDescriptionId", featureDescription[j][0]);
 
@@ -101,13 +115,138 @@ namespace WindowsFormsApp1
                             {
                                 sqlReader = await command.ExecuteReaderAsync();
 
-                                //проверим возможные значения признака
-                                await sqlReader.ReadAsync();
-                                
+                                //запись результатов
+                                if (!await sqlReader.ReadAsync())
+                                {
+                                    listBox1.Items.Add("У класса " + classes[i][1]
+                                    + " у признака " + featureDescription[j][1] + " отсутствует значение");
+                                    completenessChecked = false;
+                                    sqlReader.Close();
+                                    continue;
+                                }
+
+                                featureClassValues.Clear();
+                                do
+                                {
+                                    if (featureDescription[j][2] == "Скалярный")
+                                        featureClassValues.Add(Convert.ToString(sqlReader["value"]));
+
+                                    if (featureDescription[j][2] == "Размерный")
+                                    {
+                                        featureClassValues.Add(Convert.ToString(sqlReader["leftValueIncluded"]));
+                                        featureClassValues.Add(Convert.ToString(sqlReader["leftValue"]));
+                                        featureClassValues.Add(Convert.ToString(sqlReader["rightValue"]));
+                                        featureClassValues.Add(Convert.ToString(sqlReader["rightValueIncluded"]));
+                                    }
+
+                                    if (featureDescription[j][2] == "Логический")
+                                    {
+                                        featureClassValues.Add(Convert.ToString(sqlReader["TrueValue"]));
+                                        featureClassValues.Add(Convert.ToString(sqlReader["FalseValue"]));
+                                    }
+                                } while (await sqlReader.ReadAsync());
+                                sqlReader.Close();
+
+                                //поиск возможных значений
+                                if (featureDescription[j][2] == "Скалярный")
+                                    command = new SqlCommand("SELECT * FROM ScalarValues " +
+                                        "WHERE ScalarValues.Feature=@featuresId", sqlConnection);
+
+                                if (featureDescription[j][2] == "Размерный")
+                                    command = new SqlCommand("SELECT * FROM DimensionValue " +
+                                        "WHERE DimensionValue.Feature=@featuresId", sqlConnection);
+
+                                command.Parameters.AddWithValue("featuresId", featureDescription[j][3]);
+
+                                try
+                                {
+                                    sqlReader = await command.ExecuteReaderAsync();
+
+                                    //запись результатов
+                                    featureValues.Clear();
+                                    while (await sqlReader.ReadAsync())
+                                    {
+                                        if (featureDescription[j][2] == "Скалярный")
+                                            featureValues.Add(Convert.ToString(sqlReader["value"]));
+
+                                        if (featureDescription[j][2] == "Размерный")
+                                        {
+                                            featureValues.Add(Convert.ToString(sqlReader["leftValueIncluded"]));
+                                            featureValues.Add(Convert.ToString(sqlReader["leftValue"]));
+                                            featureValues.Add(Convert.ToString(sqlReader["rightValue"]));
+                                            featureValues.Add(Convert.ToString(sqlReader["rightValueIncluded"]));
+                                        }
+                                    }
+                                    sqlReader.Close();
+
+                                    //проверка значений признаков для классов
+                                    if (featureDescription[j][2] == "Скалярный")
+                                        for (int k = 0; k < featureClassValues.Count; k++)
+                                        {
+                                            if (featureValues.Find(value => value == featureClassValues[k]) == null)
+                                            {
+                                                listBox1.Items.Add("В классе " + classes[i][1]
+                                                    + " у признака " + featureDescription[j][1]
+                                                    + " значение " + featureClassValues[k] + " отсутствует в списке возможных значений");
+                                                completenessChecked = false;
+                                            }
+                                        }
+
+                                    if (featureDescription[j][2] == "Размерный")
+                                    {
+                                        if (Convert.ToDouble(featureValues[1]) > Convert.ToDouble(featureClassValues[1]))
+                                        {
+                                            listBox1.Items.Add("В классе " + classes[i][1]
+                                                + " у признака " + featureDescription[j][1]
+                                                + " значение " + featureClassValues[1] + " выходит за границы возможных значений этого признака");
+                                            completenessChecked = false;
+                                        }
+
+                                        if (Convert.ToDouble(featureValues[1]) == Convert.ToDouble(featureClassValues[1]) &&
+                                            Convert.ToInt32(featureValues[0]) == 0)
+                                        {
+                                            listBox1.Items.Add("В классе " + classes[i][1]
+                                                + " у признака " + featureDescription[j][1]
+                                                + " значение " + featureClassValues[1] + " выходит за границы возможных значений этого признака");
+                                            completenessChecked = false;
+                                        }
+
+                                        if (Convert.ToDouble(featureValues[2]) < Convert.ToDouble(featureClassValues[2]))
+                                        {
+                                            listBox1.Items.Add("В классе " + classes[i][1]
+                                                + " у признака " + featureDescription[j][1]
+                                                + " значение " + featureClassValues[2] + " выходит за границы возможных значений этого признака");
+                                            completenessChecked = false;
+                                        }
+
+                                        if (Convert.ToDouble(featureValues[2]) == Convert.ToDouble(featureClassValues[2]) &&
+                                            Convert.ToInt32(featureValues[3]) == 0)
+                                        {
+                                            listBox1.Items.Add("В классе " + classes[i][1]
+                                                + " у признака " + featureDescription[j][1]
+                                                + " значение " + featureClassValues[2] + " выходит за границы возможных значений этого признака");
+                                            completenessChecked = false;
+                                        }
+
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    sqlReader.Close();
+                                    completenessChecked = false;
+                                    continue;
+                                }
+                                finally
+                                {
+                                    if (sqlReader != null)
+                                        sqlReader.Close();
+                                }
+
                             }
                             catch
                             {
-                                listBox1.Items.Add("В классе " + classes[i][1] 
+                                listBox1.Items.Add("В классе " + classes[i][1]
                                     + " у признака " + featureDescription[j][1] + " отсутствует значение");
                                 completenessChecked = false;
                             }

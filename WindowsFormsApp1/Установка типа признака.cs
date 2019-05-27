@@ -15,6 +15,7 @@ namespace WindowsFormsApp1
     {
         SqlConnection sqlConnection;
         string type = "";
+        string selectedType = "";
 
         public Установка_типа_признака()
         {
@@ -62,6 +63,88 @@ namespace WindowsFormsApp1
             ifrm.Show();
         }
 
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            if (type != "" && type != selectedType)
+            {
+                var result = MessageBox.Show("Вы уверены, что хотите изменить тип признака?\nВозможные значения признака и значения признака для классов будут утеряны.", "Предупреждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                if (result == DialogResult.OK)
+                {
+                    if (type == "Скалярный")
+                    {
+                        SqlCommand command1 = new SqlCommand("DELETE ScalarValues " +
+                            "FROM Feature INNER JOIN ScalarValues ON Feature.Id=ScalarValues.Feature " +
+                            "WHERE [Feature].[Feature]=@feature", sqlConnection);
+
+                        command1.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
+                        await command1.ExecuteNonQueryAsync();
+
+                        SqlCommand command2 = new SqlCommand("DELETE ClassScalarValues " +
+                            "FROM (Feature INNER JOIN [FeatureDescription] ON Feature.Id=[FeatureDescription].Feature) " +
+                            "INNER JOIN ClassScalarValues ON ClassScalarValues.Feature=[FeatureDescription].Id " +
+                            "WHERE [Feature].[Feature]=@feature", sqlConnection);
+
+                        command2.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
+                        await command2.ExecuteNonQueryAsync();
+                    }
+
+                    if (type == "Размерный")
+                    {
+                        SqlCommand command1 = new SqlCommand("DELETE DimentionValue " +
+                            "FROM Feature INNER JOIN DimentionValue ON Feature.Id=DimentionValue.Feature " +
+                            "WHERE [Feature].[Feature]=@feature", sqlConnection);
+
+                        command1.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
+                        await command1.ExecuteNonQueryAsync();
+
+                        SqlCommand command2 = new SqlCommand("DELETE ClassDimentionValue " +
+                            "FROM (Feature INNER JOIN [FeatureDescription] ON Feature.Id=[FeatureDescription].Feature) " +
+                            "INNER JOIN ClassDimentionValue ON ClassDimentionValue.Feature=[FeatureDescription].Id " +
+                            "WHERE [Feature].[Feature]=@feature", sqlConnection);
+
+                        command2.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
+                        await command2.ExecuteNonQueryAsync();
+                    }
+
+                    if (type == "Логический")
+                    {
+                        SqlCommand command1 = new SqlCommand("DELETE LogicalValues " +
+                            "FROM Feature INNER JOIN LogicalValues ON Feature.Id=LogicalValues.Feature " +
+                            "WHERE [Feature].[Feature]=@feature", sqlConnection);
+
+                        command1.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
+                        await command1.ExecuteNonQueryAsync();
+
+                        SqlCommand command2 = new SqlCommand("DELETE ClassLogicalValues " +
+                            "FROM (Feature INNER JOIN [FeatureDescription] ON Feature.Id=[FeatureDescription].Feature) " +
+                            "INNER JOIN ClassLogicalValues ON ClassLogicalValues.Feature=[FeatureDescription].Id " +
+                            "WHERE [Feature].[Feature]=@feature", sqlConnection);
+
+                        command2.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
+                        await command2.ExecuteNonQueryAsync();
+                    }
+
+                    SqlCommand command = new SqlCommand("UPDATE [Feature] SET [Type]=@type WHERE [Feature]=@feature", sqlConnection);
+                    command.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
+                    command.Parameters.AddWithValue("type", selectedType);
+                    await command.ExecuteNonQueryAsync();
+                }
+                else
+                {
+                    SetTypeOnForm(type);
+                }
+            }
+
+            if (type == "")
+            {
+                SqlCommand command = new SqlCommand("UPDATE [Feature] SET [Type]=@type WHERE [Feature]=@feature", sqlConnection);
+                command.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
+                command.Parameters.AddWithValue("type", selectedType);
+                await command.ExecuteNonQueryAsync();
+            }
+            this.Close();
+        }
+
         private void SetTypeOnForm(string type)
         {
             if (type == "Скалярный")
@@ -107,12 +190,6 @@ namespace WindowsFormsApp1
 
         private async void button4_Click(object sender, EventArgs e)
         {
-            string selectedType = "";
-
-            if (radioButton1.Checked) selectedType = "Скалярный";
-            if (radioButton2.Checked) selectedType = "Размерный";
-            if (radioButton3.Checked) selectedType = "Логический";
-
             if (type != "" && type != selectedType)
             {
                 var result = MessageBox.Show("Вы уверены, что хотите изменить тип признака?\nВозможные значения признака и значения признака для классов будут утеряны.", "Предупреждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
@@ -122,15 +199,15 @@ namespace WindowsFormsApp1
                     {
                         SqlCommand command1 = new SqlCommand("DELETE ScalarValues " +
                             "FROM Feature INNER JOIN ScalarValues ON Feature.Id=ScalarValues.Feature " +
-                            "WHERE [Feature]=@feature", sqlConnection);
+                            "WHERE [Feature].[Feature]=@feature", sqlConnection);
 
                         command1.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
                         await command1.ExecuteNonQueryAsync();
 
                         SqlCommand command2 = new SqlCommand("DELETE ClassScalarValues " +
-                            "FROM (Feature INNER JOIN [Feature description] ON Feature.Id=[Feature description].Feature) " +
-                            "INNER JOIN ClassScalarValues ON ClassScalarValues.Feature=[Feature description].Id " +
-                            "WHERE [Feature]=@feature", sqlConnection);
+                            "FROM (Feature INNER JOIN [FeatureDescription] ON Feature.Id=[FeatureDescription].Feature) " +
+                            "INNER JOIN ClassScalarValues ON ClassScalarValues.Feature=[FeatureDescription].Id " +
+                            "WHERE [Feature].[Feature]=@feature", sqlConnection);
 
                         command2.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
                         await command2.ExecuteNonQueryAsync();
@@ -140,15 +217,15 @@ namespace WindowsFormsApp1
                     {
                         SqlCommand command1 = new SqlCommand("DELETE DimentionValue " +
                             "FROM Feature INNER JOIN DimentionValue ON Feature.Id=DimentionValue.Feature " +
-                            "WHERE [Feature]=@feature", sqlConnection);
+                            "WHERE [Feature].[Feature]=@feature", sqlConnection);
 
                         command1.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
                         await command1.ExecuteNonQueryAsync();
 
                         SqlCommand command2 = new SqlCommand("DELETE ClassDimentionValue " +
-                            "FROM (Feature INNER JOIN [Feature description] ON Feature.Id=[Feature description].Feature) " +
-                            "INNER JOIN ClassDimentionValue ON ClassDimentionValue.Feature=[Feature description].Id " +
-                            "WHERE [Feature]=@feature", sqlConnection);
+                            "FROM (Feature INNER JOIN [FeatureDescription] ON Feature.Id=[FeatureDescription].Feature) " +
+                            "INNER JOIN ClassDimentionValue ON ClassDimentionValue.Feature=[FeatureDescription].Id " +
+                            "WHERE [Feature].[Feature]=@feature", sqlConnection);
 
                         command2.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
                         await command2.ExecuteNonQueryAsync();
@@ -158,15 +235,15 @@ namespace WindowsFormsApp1
                     {
                         SqlCommand command1 = new SqlCommand("DELETE LogicalValues " +
                             "FROM Feature INNER JOIN LogicalValues ON Feature.Id=LogicalValues.Feature " +
-                            "WHERE [Feature]=@feature", sqlConnection);
+                            "WHERE [Feature].[Feature]=@feature", sqlConnection);
 
                         command1.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
                         await command1.ExecuteNonQueryAsync();
 
                         SqlCommand command2 = new SqlCommand("DELETE ClassLogicalValues " +
-                            "FROM (Feature INNER JOIN [Feature description] ON Feature.Id=[Feature description].Feature) " +
-                            "INNER JOIN ClassLogicalValues ON ClassLogicalValues.Feature=[Feature description].Id " +
-                            "WHERE [Feature]=@feature", sqlConnection);
+                            "FROM (Feature INNER JOIN [FeatureDescription] ON Feature.Id=[FeatureDescription].Feature) " +
+                            "INNER JOIN ClassLogicalValues ON ClassLogicalValues.Feature=[FeatureDescription].Id " +
+                            "WHERE [Feature].[Feature]=@feature", sqlConnection);
 
                         command2.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
                         await command2.ExecuteNonQueryAsync();
@@ -181,6 +258,14 @@ namespace WindowsFormsApp1
                 {
                     SetTypeOnForm(type);
                 }
+            }
+
+            if (type == "")
+            {
+                SqlCommand command = new SqlCommand("UPDATE [Feature] SET [Type]=@type WHERE [Feature]=@feature", sqlConnection);
+                command.Parameters.AddWithValue("feature", comboBox1.SelectedItem);
+                command.Parameters.AddWithValue("type", selectedType);
+                await command.ExecuteNonQueryAsync();
             }
 
             if (radioButton1.Checked)
@@ -204,6 +289,21 @@ namespace WindowsFormsApp1
                 ifrm.Show(this); // отображаем Form2
                 this.Hide(); // скрываем Form1
             }
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            selectedType = "Скалярный";
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            selectedType = "Размерный";
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            selectedType = "Логический";
         }
     }
 }

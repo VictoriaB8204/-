@@ -166,6 +166,12 @@ namespace WindowsFormsApp1
 
         private async void button4_Click(object sender, EventArgs e)
         {
+            if (Convert.ToString(comboBox1.SelectedItem) != Convert.ToString(comboBox2.SelectedItem) &&
+                numericUpDown1.Value == numericUpDown2.Value)
+            {
+                MessageBox.Show("Неверный интервал!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             string featureDescriptionId = "";
             SqlCommand command = new SqlCommand("SELECT Id FROM FeatureDescription WHERE Class=@class AND Feature=@feature", sqlConnection);
             command.Parameters.AddWithValue("feature", _featureId);
