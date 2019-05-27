@@ -17,13 +17,6 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Form ifrm = new Form3();
-            ifrm.Show(this); // отображаем Form2
-            this.Hide(); // скрываем Form1
-        }
-
         private void Form2_Load(object sender, EventArgs e)
         {
             //Центрирование формы
@@ -39,39 +32,46 @@ namespace WindowsFormsApp1
             ifrm.Show();
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Form ifrm = new Form3();
+            this.Hide(); // скрываем Form1
+            ifrm.ShowDialog(this); // отображаем Form2
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             Form ifrm = new Form4();
-            ifrm.Show(this); // отображаем Form2
             this.Hide(); // скрываем Form1
+            ifrm.ShowDialog(this); // отображаем Form2
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             Form ifrm = new Установка_типа_признака();
-            ifrm.Show(this); // отображаем Form2
             this.Hide(); // скрываем Form1
+            ifrm.ShowDialog(this); // отображаем Form2
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             Form ifrm = new Признаковое_описание_классов();
-            ifrm.Show(this); // отображаем Form2
             this.Hide(); // скрываем Form1
+            ifrm.ShowDialog(this); // отображаем Form2
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             Form ifrm = new Значения_признаков_для_классов();
-            ifrm.Show(this); // отображаем Form2
             this.Hide(); // скрываем Form1
+            ifrm.ShowDialog(this); // отображаем Form2
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
             Form ifrm = new Проверка_полноты();
-            ifrm.Show(this); // отображаем Form2
             this.Hide(); // скрываем Form1
+            ifrm.ShowDialog(this); // отображаем Form2
         }
     }
 }

@@ -23,8 +23,9 @@ namespace WindowsFormsApp1
         private void button1_Click(object sender, EventArgs e)
         {
             Form ifrm = new Form2();
-            ifrm.Show(this); // отображаем Form2
             this.Hide(); // скрываем Form1
+            ifrm.ShowDialog(this);
+            UpdateForm();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -43,9 +44,15 @@ namespace WindowsFormsApp1
             
             SqlCommand command = new SqlCommand("SELECT completeness FROM Completeness", sqlConnection);
             sqlReader = await command.ExecuteReaderAsync();
-            await sqlReader.ReadAsync();
             try
             {
+                if(!await sqlReader.ReadAsync())
+                {
+                    sqlReader.Close();
+                    command = new SqlCommand("INSERT INTO Completeness (completeness) VALUES (0)", sqlConnection);
+                    await command.ExecuteNonQueryAsync();
+                }
+
                 if (Convert.ToInt64(sqlReader["completeness"]) == 0)
                 {
                     button2.IsAccessible = false;
@@ -59,6 +66,33 @@ namespace WindowsFormsApp1
             }
             catch
             {
+                button2.IsAccessible = false;
+                button2.Enabled = false;
+            }
+            sqlReader.Close();
+        }
+
+        private async void UpdateForm()
+        {
+            SqlCommand command = new SqlCommand("SELECT completeness FROM Completeness", sqlConnection);
+            SqlDataReader sqlReader = await command.ExecuteReaderAsync();
+            await sqlReader.ReadAsync();
+            try
+            {
+                if (Convert.ToString(sqlReader["completeness"]) == "0")
+                {
+                    button2.IsAccessible = false;
+                    button2.Enabled = false;
+                }
+                else
+                {
+                    button2.IsAccessible = true;
+                    button2.Enabled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 button2.IsAccessible = false;
                 button2.Enabled = false;
             }

@@ -287,15 +287,15 @@ namespace WindowsFormsApp1
             {
                 listBox1.Items.Add("Проверка полноты пройдена");
                 command = new SqlCommand("UPDATE Completeness SET " +
-                    "completeness=@True", sqlConnection);
-                command.Parameters.AddWithValue("True", 1);
+                    "completeness=@value", sqlConnection);
+                command.Parameters.AddWithValue("value", 1);
                 await command.ExecuteNonQueryAsync();
             }
             else
             {
                 command = new SqlCommand("UPDATE Completeness SET " +
-                    "completeness=@False", sqlConnection);
-                command.Parameters.AddWithValue("False", 0);
+                    "completeness=@value", sqlConnection);
+                command.Parameters.AddWithValue("value", 0);
                 await command.ExecuteNonQueryAsync();
             }
         }
