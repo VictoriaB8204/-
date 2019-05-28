@@ -124,7 +124,13 @@ namespace WindowsFormsApp1
                 return;
             }
 
-            Form ifrm = new Ввод_значений_выбранных_признаков(listBox2.Items);
+            List<string> features = new List<string>();
+            for(int i = 0; i < listBox2.Items.Count; i++)
+            {
+                features.Add(Convert.ToString(listBox2.Items[i]));
+            }
+
+            Form ifrm = new Ввод_значений_выбранных_признаков(features);
             this.Hide(); // скрываем Form1
             ifrm.ShowDialog(this); // отображаем Form2
         }
