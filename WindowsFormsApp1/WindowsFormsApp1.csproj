@@ -120,6 +120,12 @@
     <Compile Include="ScalarValues.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Ввод значений выбранных признаков.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ввод значений выбранных признаков.Designer.cs">
+      <DependentUpon>Ввод значений выбранных признаков.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ввод логических значений для классов.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,6 +161,12 @@
     </Compile>
     <Compile Include="Ввод скалярных значений.Designer.cs">
       <DependentUpon>Ввод скалярных значений.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Выбор признаков.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Выбор признаков.Designer.cs">
+      <DependentUpon>Выбор признаков.cs</DependentUpon>
     </Compile>
     <Compile Include="Значения признаков для классов.cs">
       <SubType>Form</SubType>
@@ -206,6 +218,9 @@
     <Compile Include="Установка типа признака.Designer.cs">
       <DependentUpon>Установка типа признака.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Ввод значений выбранных признаков.resx">
+      <DependentUpon>Ввод значений выбранных признаков.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ввод логических значений для классов.resx">
       <DependentUpon>Ввод логических значений для классов.cs</DependentUpon>
     </EmbeddedResource>
@@ -223,6 +238,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Ввод скалярных значений.resx">
       <DependentUpon>Ввод скалярных значений.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Выбор признаков.resx">
+      <DependentUpon>Выбор признаков.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Значения признаков для классов.resx">
       <DependentUpon>Значения признаков для классов.cs</DependentUpon>

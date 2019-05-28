@@ -30,9 +30,10 @@ namespace WindowsFormsApp1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (!button2.IsAccessible)
-                MessageBox.Show("Данная кнопка недоступна, так как не пройдена проверка полноты базы знаний.",
-                    "Информация",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            Form ifrm = new Выбор_признаков();
+            this.Hide(); // скрываем Form1
+            ifrm.ShowDialog(this);
+            UpdateForm();
         }
 
         private async void MainForm_Load(object sender, EventArgs e)
