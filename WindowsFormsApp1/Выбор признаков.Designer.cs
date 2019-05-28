@@ -48,7 +48,7 @@
             // button5
             // 
             this.button5.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button5.Location = new System.Drawing.Point(579, 382);
+            this.button5.Location = new System.Drawing.Point(676, 379);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(114, 36);
             this.button5.TabIndex = 20;
@@ -59,7 +59,7 @@
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Arial", 10.8F);
-            this.button3.Location = new System.Drawing.Point(315, 227);
+            this.button3.Location = new System.Drawing.Point(368, 224);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 30);
             this.button3.TabIndex = 19;
@@ -70,7 +70,7 @@
             // button4
             // 
             this.button4.Font = new System.Drawing.Font("Arial", 10.8F);
-            this.button4.Location = new System.Drawing.Point(315, 198);
+            this.button4.Location = new System.Drawing.Point(368, 195);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 30);
             this.button4.TabIndex = 18;
@@ -81,7 +81,7 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Arial", 10.8F);
-            this.button2.Location = new System.Drawing.Point(315, 169);
+            this.button2.Location = new System.Drawing.Point(368, 166);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 30);
             this.button2.TabIndex = 17;
@@ -92,7 +92,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Arial", 10.8F);
-            this.button1.Location = new System.Drawing.Point(315, 140);
+            this.button1.Location = new System.Drawing.Point(368, 137);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 30);
             this.button1.TabIndex = 16;
@@ -105,9 +105,9 @@
             this.listBox2.Font = new System.Drawing.Font("Arial", 10.8F);
             this.listBox2.FormattingEnabled = true;
             this.listBox2.ItemHeight = 21;
-            this.listBox2.Location = new System.Drawing.Point(396, 57);
+            this.listBox2.Location = new System.Drawing.Point(449, 54);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(297, 319);
+            this.listBox2.Size = new System.Drawing.Size(341, 319);
             this.listBox2.TabIndex = 15;
             // 
             // listBox1
@@ -115,9 +115,9 @@
             this.listBox1.Font = new System.Drawing.Font("Arial", 10.8F);
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 21;
-            this.listBox1.Location = new System.Drawing.Point(12, 57);
+            this.listBox1.Location = new System.Drawing.Point(16, 54);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(297, 319);
+            this.listBox1.Size = new System.Drawing.Size(346, 319);
             this.listBox1.TabIndex = 14;
             // 
             // label1
@@ -148,7 +148,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(714, 427);
+            this.ClientSize = new System.Drawing.Size(802, 427);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button3);

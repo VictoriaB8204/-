@@ -39,8 +39,31 @@ namespace WindowsFormsApp1
             string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\учеба\Смагин\Реализация классификатора\WindowsFormsApp1\WindowsFormsApp1\Database1.mdf;Integrated Security=True";
             sqlConnection = new SqlConnection(connectionString);
             await sqlConnection.OpenAsync();
+
             for(int i = 0; i < features.Count; i++)
             {
+                SqlCommand command = new SqlCommand("SELECT * FROM Feature WHERE Feature=@feature", sqlConnection);
+                command.Parameters.AddWithValue("feature", features[i][0]);
+                SqlDataReader sqlReader = null;
+                try
+                {
+                    sqlReader = await command.ExecuteReaderAsync();
+                    if(await sqlReader.ReadAsync())
+                    {
+                        features[i].Add(Convert.ToString(sqlReader["Id"]));
+                        features[i].Add(Convert.ToString(sqlReader["Type"]));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    if (!sqlReader.IsClosed)
+                        sqlReader.Close();
+                }
+
                 listBox1.Items.Add(features[i][0]);
             }
         }
@@ -74,87 +97,78 @@ namespace WindowsFormsApp1
             label5.Visible = false;
             numericUpDown1.Visible = false;
             numericUpDown1.Minimum = 0;
-            numericUpDown1.Maximum = 0;
+            numericUpDown1.Maximum = 1000000;
             numericUpDown1.Value = 0;
 
             //Ввод значений
-            SqlCommand command = new SqlCommand("SELECT * FROM Feature WHERE Feature=@feature", sqlConnection);
-            command.Parameters.AddWithValue("feature", listBox1.SelectedItem);
+            SqlCommand command;
             SqlDataReader sqlReader = null;
-            try
+
+            if (features[listBox1.SelectedIndex][2] == "Скалярный")
             {
-                sqlReader = await command.ExecuteReaderAsync();
-                await sqlReader.ReadAsync();
-
-                if(Convert.ToString(sqlReader["Type"]) == "Скалярный")
+                command = new SqlCommand("SELECT value FROM ScalarValues WHERE Feature=@featureId", sqlConnection);
+                command.Parameters.AddWithValue("featureId", features[listBox1.SelectedIndex][1]);
+                
+                try
                 {
-                    command = new SqlCommand("SELECT value FROM ScalarValues WHERE Feature=@featureId", sqlConnection);
-                    command.Parameters.AddWithValue("featureId", Convert.ToString(sqlReader["Id"]));
-
-                    sqlReader.Close();
-                    try
+                    sqlReader = await command.ExecuteReaderAsync();
+                    while(await sqlReader.ReadAsync())
                     {
-                        sqlReader = await command.ExecuteReaderAsync();
-                        while(await sqlReader.ReadAsync())
-                        {
-                            comboBox1.Items.Add(Convert.ToString(sqlReader["value"]));
-                        }
+                        comboBox1.Items.Add(Convert.ToString(sqlReader["value"]));
+                    }
 
-                        if (features[listBox1.SelectedIndex].Count > 1)
-                            comboBox1.SelectedItem = features[listBox1.SelectedIndex][1];
+                    if (features[listBox1.SelectedIndex].Count > 3)
+                        comboBox1.SelectedItem = features[listBox1.SelectedIndex][3];
 
-                        comboBox1.Visible = true;
-                    }
-                    catch(Exception ex)
-                    {
-                        MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    finally
-                    {
-                        if (!sqlReader.IsClosed)
-                            sqlReader.Close();
-                    }
+                    comboBox1.Visible = true;
                 }
-                else if (Convert.ToString(sqlReader["Type"]) == "Логический")
+                catch(Exception ex)
                 {
-                    command = new SqlCommand("SELECT * FROM LogicalValues WHERE Feature=@featureId", sqlConnection);
-                    command.Parameters.AddWithValue("featureId", Convert.ToString(sqlReader["Id"]));
-
-                    sqlReader.Close();
-                    try
-                    {
-                        sqlReader = await command.ExecuteReaderAsync();
-                        if (await sqlReader.ReadAsync())
-                        {
-                            radioButton1.Text = Convert.ToString(sqlReader["TrueValue"]);
-                            radioButton2.Text = Convert.ToString(sqlReader["FalseValue"]);
-                        }
-
-                        if (features[listBox1.SelectedIndex].Count > 1)
-                            if (features[listBox1.SelectedIndex][1] == radioButton1.Text)
-                                radioButton1.Checked = true;
-                            else
-                                radioButton2.Checked = true;
-
-                        radioButton1.Visible = true;
-                        radioButton2.Visible = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    finally
-                    {
-                        if (!sqlReader.IsClosed)
-                            sqlReader.Close();
-                    }
+                    MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                else if (Convert.ToString(sqlReader["Type"]) == "Размерный")
+                finally
+                {
+                    if (!sqlReader.IsClosed)
+                        sqlReader.Close();
+                }
+            }
+            if (features[listBox1.SelectedIndex][2] == "Логический")
+            {
+                command = new SqlCommand("SELECT * FROM LogicalValues WHERE Feature=@featureId", sqlConnection);
+                command.Parameters.AddWithValue("featureId", features[listBox1.SelectedIndex][1]);
+
+                try
+                {
+                    sqlReader = await command.ExecuteReaderAsync();
+                    if (await sqlReader.ReadAsync())
+                    {
+                        radioButton1.Text = Convert.ToString(sqlReader["TrueValue"]);
+                        radioButton2.Text = Convert.ToString(sqlReader["FalseValue"]);
+                    }
+
+                    if (features[listBox1.SelectedIndex].Count > 3)
+                        if (features[listBox1.SelectedIndex][3] == "TrueValue")
+                            radioButton1.Checked = true;
+                        else
+                            radioButton2.Checked = true;
+
+                    radioButton1.Visible = true;
+                    radioButton2.Visible = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    if (!sqlReader.IsClosed)
+                        sqlReader.Close();
+                }
+            }
+            if (features[listBox1.SelectedIndex][2] == "Размерный")
                 {
                     command = new SqlCommand("SELECT * FROM DimensionValue WHERE Feature=@featureId", sqlConnection);
-                    command.Parameters.AddWithValue("featureId", Convert.ToString(sqlReader["Id"]));
-
-                    sqlReader.Close();
+                    command.Parameters.AddWithValue("featureId", features[listBox1.SelectedIndex][1]);
                     try
                     {
                         sqlReader = await command.ExecuteReaderAsync();
@@ -189,13 +203,12 @@ namespace WindowsFormsApp1
                             }
                         }
 
-                        if (features[listBox1.SelectedIndex].Count > 1)
-                            numericUpDown1.Value = Convert.ToDecimal(features[listBox1.SelectedIndex][1]);
+                        if (features[listBox1.SelectedIndex].Count > 3)
+                            numericUpDown1.Value = Convert.ToDecimal(features[listBox1.SelectedIndex][3]);
 
                         label5.Visible = true;
                         label2.Visible = true;
                         label4.Visible = true;
-                        //numericUpDown1.Value = numericUpDown1.Minimum;
                         numericUpDown1.Visible = true;
                     }
                     catch (Exception ex)
@@ -208,16 +221,7 @@ namespace WindowsFormsApp1
                             sqlReader.Close();
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                if (!sqlReader.IsClosed)
-                    sqlReader.Close();
-            }
+            
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -225,8 +229,8 @@ namespace WindowsFormsApp1
             if (!comboBox1.Visible)
                 return;
 
-            if (features[listBox1.SelectedIndex].Count > 1)
-                features[listBox1.SelectedIndex][1] = Convert.ToString(comboBox1.SelectedItem);
+            if (features[listBox1.SelectedIndex].Count > 3)
+                features[listBox1.SelectedIndex][3] = Convert.ToString(comboBox1.SelectedItem);
             else
                 features[listBox1.SelectedIndex].Add(Convert.ToString(comboBox1.SelectedItem));
         }
@@ -236,10 +240,10 @@ namespace WindowsFormsApp1
             if (!radioButton1.Visible)
                 return;
 
-            if (features[listBox1.SelectedIndex].Count > 1)
-                features[listBox1.SelectedIndex][1] = radioButton1.Text;
+            if (features[listBox1.SelectedIndex].Count > 3)
+                features[listBox1.SelectedIndex][3] = "TrueValue";
             else
-                features[listBox1.SelectedIndex].Add(radioButton1.Text);
+                features[listBox1.SelectedIndex].Add("TrueValue");
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
@@ -247,10 +251,10 @@ namespace WindowsFormsApp1
             if (!radioButton1.Visible)
                 return;
 
-            if (features[listBox1.SelectedIndex].Count > 1)
-                features[listBox1.SelectedIndex][1] = radioButton2.Text;
+            if (features[listBox1.SelectedIndex].Count > 3)
+                features[listBox1.SelectedIndex][3] = "FalseValue";
             else
-                features[listBox1.SelectedIndex].Add(radioButton2.Text);
+                features[listBox1.SelectedIndex].Add("FalseValue");
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -258,8 +262,8 @@ namespace WindowsFormsApp1
             if (!numericUpDown1.Visible)
                 return;
 
-            if (features[listBox1.SelectedIndex].Count > 1)
-                features[listBox1.SelectedIndex][1] = Convert.ToString(numericUpDown1.Value);
+            if (features[listBox1.SelectedIndex].Count > 3)
+                features[listBox1.SelectedIndex][3] = Convert.ToString(numericUpDown1.Value);
             else
                 features[listBox1.SelectedIndex].Add(Convert.ToString(numericUpDown1.Value));
         }
@@ -270,10 +274,10 @@ namespace WindowsFormsApp1
             string result = "";
             for(int i = 0; i < features.Count; i++)
             {
-                if(features[i].Count == 1)
+                if(features[i].Count == 3)
                 {
                     allValuesEntered = false;
-                    result += "У признака " + features[i][0] + " не введено значение!" + System.Environment.NewLine;
+                    result += "У признака '" + features[i][0] + "' не введено значение!" + System.Environment.NewLine;
                 }
             }
 
@@ -281,7 +285,9 @@ namespace WindowsFormsApp1
                 MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
-                //открыть форму решателя
+                Form ifrm = new Решатель(features);
+                this.Hide(); // скрываем Form1
+                ifrm.ShowDialog(this); // отображаем Form2
             }
         }
     }

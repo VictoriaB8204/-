@@ -31,9 +31,8 @@ namespace WindowsFormsApp1
         private void button2_Click(object sender, EventArgs e)
         {
             Form ifrm = new Выбор_признаков();
+            ifrm.Show(this);
             this.Hide(); // скрываем Form1
-            ifrm.ShowDialog(this);
-            UpdateForm();
         }
 
         private async void MainForm_Load(object sender, EventArgs e)

@@ -212,6 +212,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Решатель.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Решатель.Designer.cs">
+      <DependentUpon>Решатель.cs</DependentUpon>
+    </Compile>
     <Compile Include="Установка типа признака.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -272,6 +278,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Решатель.resx">
+      <DependentUpon>Решатель.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Установка типа признака.resx">
       <DependentUpon>Установка типа признака.cs</DependentUpon>
     </EmbeddedResource>
