@@ -211,6 +211,7 @@ namespace WindowsFormsApp1
                 listBox1.Items.Add("Подходящий класс не найден");
 
             dataGridView1.DataSource = unsuitableClasses;
+            dataGridView1.Columns[dataGridView1.ColumnCount - 1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
         private void Решатель_FormClosing(object sender, FormClosingEventArgs e)
