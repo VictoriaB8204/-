@@ -205,6 +205,8 @@ namespace WindowsFormsApp1
 
                         if (features[listBox1.SelectedIndex].Count > 3)
                             numericUpDown1.Value = Convert.ToDecimal(features[listBox1.SelectedIndex][3]);
+                        else
+                            features[listBox1.SelectedIndex].Add(Convert.ToString(numericUpDown1.Minimum));
 
                         label5.Visible = true;
                         label2.Visible = true;
@@ -229,7 +231,7 @@ namespace WindowsFormsApp1
             if (!comboBox1.Visible)
                 return;
 
-            if (features[listBox1.SelectedIndex].Count > 3)
+            if (features[listBox1.SelectedIndex].Count > 3) 
                 features[listBox1.SelectedIndex][3] = Convert.ToString(comboBox1.SelectedItem);
             else
                 features[listBox1.SelectedIndex].Add(Convert.ToString(comboBox1.SelectedItem));

@@ -40,7 +40,7 @@
             // button5
             // 
             this.button5.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button5.Location = new System.Drawing.Point(579, 405);
+            this.button5.Location = new System.Drawing.Point(862, 402);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(114, 36);
             this.button5.TabIndex = 16;
@@ -73,24 +73,24 @@
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCellsExceptHeader;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(12, 92);
             this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(681, 295);
+            this.dataGridView1.Size = new System.Drawing.Size(964, 295);
             this.dataGridView1.TabIndex = 17;
             // 
             // button4
             // 
             this.button4.Font = new System.Drawing.Font("Arial", 10.8F);
-            this.button4.Location = new System.Drawing.Point(380, 405);
+            this.button4.Location = new System.Drawing.Point(648, 402);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(193, 36);
+            this.button4.Size = new System.Drawing.Size(208, 36);
             this.button4.TabIndex = 18;
-            this.button4.Text = "Ввести значения";
+            this.button4.Text = "Изменить значения";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -98,7 +98,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(710, 450);
+            this.ClientSize = new System.Drawing.Size(988, 450);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.button5);

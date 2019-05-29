@@ -145,10 +145,39 @@ namespace WindowsFormsApp1
                 try
                 {
                     sqlReader = await command.ExecuteReaderAsync();
+                    string value = "";
+
                     if (await sqlReader.ReadAsync())
-                        features.Rows[i]["Значение"] = "Внесено";
+                    {
+                        if (Convert.ToString(features.Rows[i]["Тип"]) == "Скалярный")
+                            do
+                            {
+                                value += Convert.ToString(sqlReader["value"]) + ", ";
+                            } while (await sqlReader.ReadAsync());
+
+                        if (Convert.ToString(features.Rows[i]["Тип"]) == "Размерный")
+                        {
+                            if (Convert.ToString(sqlReader["leftValueIncluded"]) == "1")
+                                value = "[";
+                            else
+                                value = "(";
+
+                            value += Convert.ToString(sqlReader["leftValue"]) + ";"
+                                + Convert.ToString(sqlReader["rightValue"]);
+
+                            if (Convert.ToString(sqlReader["rightValueIncluded"]) == "1")
+                                value += "]";
+                            else
+                                value += ")";
+                        }
+
+                        if (Convert.ToString(features.Rows[i]["Тип"]) == "Логический")
+                            value = Convert.ToString(sqlReader["TrueValue"]) + ", " + Convert.ToString(sqlReader["FalseValue"]);
+                    }
                     else
-                        features.Rows[i]["Значение"] = "Не внесено";
+                        value = "Не внесено";
+
+                    features.Rows[i]["Значение"] = value;
                 }
                 catch { }
                 finally
@@ -159,6 +188,7 @@ namespace WindowsFormsApp1
             }
             
             dataGridView1.DataSource = features;
+            dataGridView1.Columns[dataGridView1.ColumnCount - 1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
         private void button4_Click(object sender, EventArgs e)
