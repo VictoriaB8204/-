@@ -38,7 +38,7 @@
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.Location = new System.Drawing.Point(27, 32);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(405, 35);
+            this.button1.Size = new System.Drawing.Size(457, 35);
             this.button1.TabIndex = 0;
             this.button1.Text = "Редактировать знания";
             this.button1.UseVisualStyleBackColor = true;
@@ -49,7 +49,7 @@
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button2.Location = new System.Drawing.Point(27, 73);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(405, 35);
+            this.button2.Size = new System.Drawing.Size(457, 35);
             this.button2.TabIndex = 1;
             this.button2.Text = "Найти класс кондитерского изделия";
             this.button2.UseVisualStyleBackColor = true;
@@ -59,7 +59,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(467, 140);
+            this.ClientSize = new System.Drawing.Size(514, 140);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
