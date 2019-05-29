@@ -180,7 +180,13 @@ namespace WindowsFormsApp1
             await command.ExecuteNonQueryAsync();
 
             listBox2.Items.Add(listBox1.SelectedItem);
-            listBox1.Items.RemoveAt(listBox1.SelectedIndex);
+
+            int index = 0;
+            if (listBox1.SelectedIndex != listBox1.Items.Count - 1)
+                index++;
+
+            listBox1.SelectedIndex += index;
+            listBox1.Items.RemoveAt(listBox1.SelectedIndex - index);
         }
 
         private async void button4_Click(object sender, EventArgs e)
@@ -211,7 +217,13 @@ namespace WindowsFormsApp1
             await command.ExecuteNonQueryAsync();
 
             listBox1.Items.Add(listBox2.SelectedItem);
-            listBox2.Items.RemoveAt(listBox2.SelectedIndex);
+
+            int index = 0;
+            if (listBox2.SelectedIndex != listBox2.Items.Count - 1)
+                index++;
+
+            listBox2.SelectedIndex += index;
+            listBox2.Items.RemoveAt(listBox2.SelectedIndex - index);
         }
 
         private async void button3_Click(object sender, EventArgs e)
