@@ -61,11 +61,12 @@ namespace WindowsFormsApp1
             }
 
             //классифицируем
-            string featureDescriptionId = "";
+            string featureDescriptionId;
             bool isSuitableСlass;
             for (int i = 0; i < features.Count; i++)
                 for (int j = 0; j < classes.Count; j++)
                 {
+                    featureDescriptionId = "";
                     isSuitableСlass = false;
                     //нужно узнать является ли класс подходящим для признака с таким значением
                     //для этого нужно:
@@ -90,6 +91,12 @@ namespace WindowsFormsApp1
                     {
                         if (!sqlReader.IsClosed)
                             sqlReader.Close();
+                    }
+
+                    if(featureDescriptionId == "")
+                    {
+                        classes[j].Add("Признак '" + features[i][0] + "' не входит в признаковое описание класса");
+                        continue;
                     }
                     
                     //для скалярных признаков нужно искать записи с равным значением
