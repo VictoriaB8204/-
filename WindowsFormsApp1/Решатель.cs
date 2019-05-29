@@ -180,7 +180,7 @@ namespace WindowsFormsApp1
                     
                     //если класс не подходит и у него пустая причина, то добавить причину
                     if (!isSuitableСlass && classes[j].Count == 2)
-                        classes[j].Add("Признак " + features[i][0] + " имеет не подходящее значение");
+                        classes[j].Add("Признак '" + features[i][0] + "' имеет не подходящее значение");
                 }
 
             //выводим результат
