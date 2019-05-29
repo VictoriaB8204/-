@@ -65,6 +65,12 @@ namespace WindowsFormsApp1
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            if (comboBox1.SelectedItem == null)
+            {
+                this.Close();
+                return;
+            }
+
             if (type != "" && type != selectedType)
             {
                 var result = MessageBox.Show("Вы уверены, что хотите изменить тип признака?\nВозможные значения признака и значения признака для классов будут утеряны.", "Предупреждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
