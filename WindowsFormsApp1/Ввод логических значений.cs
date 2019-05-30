@@ -87,11 +87,9 @@ namespace WindowsFormsApp1
 
             SqlCommand command = new SqlCommand("SELECT * " +
             "FROM Feature INNER JOIN LogicalValues ON Feature.Id=LogicalValues.Feature " +
-            "WHERE Feature.Feature=@feature AND [TrueValue]=@TrueValue AND FalseValue=@FalseValue", sqlConnection);
+            "WHERE Feature.Feature=@feature", sqlConnection);
 
             command.Parameters.AddWithValue("feature", _feature);
-            command.Parameters.AddWithValue("TrueValue", textBox1.Text);
-            command.Parameters.AddWithValue("FalseValue", textBox2.Text);
 
             bool recordExist = false;
             try
@@ -100,7 +98,7 @@ namespace WindowsFormsApp1
                 recordExist = await sqlReader.ReadAsync();
                 sqlReader.Close();
             }
-            catch (Exception ex) { }
+            catch { }
 
             command = new SqlCommand("SELECT [Id] FROM [Feature] WHERE [Feature].[Feature]=@feature", sqlConnection);
             command.Parameters.AddWithValue("feature", _feature);
@@ -121,7 +119,7 @@ namespace WindowsFormsApp1
             else
             {
                 command = new SqlCommand("INSERT INTO [LogicalValues] " +
-                    "(Feature, TrueValue, FalseValue)" +
+                    "(Feature, TrueValue, FalseValue) " +
                     "VALUES(@Id, @TrueValue, @FalseValue)", sqlConnection);
                 command.Parameters.AddWithValue("Id", id["Id"]);
                 command.Parameters.AddWithValue("TrueValue", textBox1.Text);
