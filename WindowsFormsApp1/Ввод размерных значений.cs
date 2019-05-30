@@ -131,11 +131,9 @@ namespace WindowsFormsApp1
 
             command = new SqlCommand("SELECT * " +
             "FROM Feature INNER JOIN DimensionValue ON Feature.Id=DimensionValue.Feature " +
-            "WHERE [Feature]=@feature AND [leftValueIncluded]=@leftValueIncluded AND leftValue=@leftValue " +
-            "AND rightValue=@rightValue AND [rightValueIncluded]=@rightValueIncluded AND unit=@unit", sqlConnection);
+            "WHERE [Feature].[Feature]=@feature", sqlConnection);
 
             command.Parameters.AddWithValue("feature", _feature);
-            SetParameters(command);
 
             bool recordExist = false;
             try
@@ -155,7 +153,7 @@ namespace WindowsFormsApp1
             {
                 command = new SqlCommand("UPDATE DimensionValue SET " +
                     "leftValueIncluded=@leftValueIncluded, leftValue=@leftValue, " +
-                    "rightValue=@rightValue, [rightValueIncluded]=@rightValueIncluded, unit=@unit" +
+                    "rightValue=@rightValue, [rightValueIncluded]=@rightValueIncluded, unit=@unit " +
                     "WHERE [Feature]=@feature", sqlConnection);
                 command.Parameters.AddWithValue("feature", id["Id"]);
                 SetParameters(command);
@@ -165,7 +163,7 @@ namespace WindowsFormsApp1
             else
             {
                 command = new SqlCommand("INSERT INTO [DimensionValue] " +
-                    "(Feature, leftValueIncluded, leftValue, rightValue, rightValueIncluded, unit)" +
+                    "(Feature, leftValueIncluded, leftValue, rightValue, rightValueIncluded, unit) " +
                     "VALUES(@Id, @leftValueIncluded, @leftValue, @rightValue, @rightValueIncluded, @unit)", sqlConnection);
                 command.Parameters.AddWithValue("Id", id["Id"]);
                 SetParameters(command);
